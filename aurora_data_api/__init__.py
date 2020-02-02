@@ -141,6 +141,11 @@ class AuroraDataAPICursor:
         if param_value is None:
             return {"isNull": True}
         param_data_api_type = self._data_api_type_map.get(type(param_value), "stringValue")
+        
+        #cast string value param to string if it isnt already -- this fixes datetime conversion problem in mysql
+        if type(param_value) != str and param_data_api_type == "stringValue":
+            param_value = str(param_value)
+        
         # if param_data_api_type == "arrayValue" and len(param_value) > 0:
         #     return {
         #         param_data_api_type: {
